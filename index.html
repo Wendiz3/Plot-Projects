@@ -62,7 +62,7 @@
       { Client: 'Marble Construction', Department: 'Urban Forestry/FireSmart', Latitude: 49.3175, Longitude: -123.0425, Type: 'Urban Forestry' },
       { Client: 'McLeod Bovell', Department: 'Urban Forestry/FireSmart', Latitude: 49.39333333, Longitude: -123.2547222, Type: 'WHA, Arborist Report' },
       { Client: 'McLeod Lake Mackenzie Community Forest', Department: 'Planning', Latitude: 55.34861111, Longitude: -123.0563889, Type: 'MLMCF' },
-      { Client: 'Nak\'azdli Whut\'en First Nation', Department: 'Planning', Latitude: 54.43833333, Longitude: -124.25, Type: 'CWRP' },
+      { Client: 'Nakazdli Whuten First Nation', Department: 'Planning', Latitude: 54.43833333, Longitude: -124.25, Type: 'CWRP' },
       { Client: 'Nenqay Department XGFNG', Department: 'Urban Forestry/FireSmart', Latitude: 51.46694444, Longitude: -123.945, Type: 'FireSmart' },
       { Client: 'Nielsen, Greg', Department: 'Urban Forestry/FireSmart', Latitude: 49.35805556, Longitude: -123.2588889, Type: 'WHA, Arborist Report' },
       { Client: 'Nquatqua First Nation', Department: 'Urban Forestry/FireSmart', Latitude: 50.55, Longitude: -122.4844444, Type: 'FireSmart' },
@@ -103,12 +103,7 @@
     // Add circle markers
     projects.forEach(client => {
       L.circleMarker([client.Latitude, client.Longitude], {
-        color: client.Department === "Urban Forestry/FireSmart" ? "red" :
-               client.Department === "Niche" ? "blue" :
-               client.Department === "Planning" ? "green" :
-               client.Department === "GIS" ? "purple" :
-               client.Department === "Innovations" ? "orange" :
-               client.Department === "Prescriptions/Ops" ? "yellow" : "black",
+        color: 'black',
         radius: 5
       }).addTo(map)
       .bindPopup(`<b>Client:</b> ${client.Client}<br><b>Department:</b> ${client.Department}<br><b>Type:</b> ${client.Type}`)
@@ -120,7 +115,7 @@
     legend.onAdd = function(map) {
       const div = L.DomUtil.create('div', 'info legend');
       const departments = ["Urban Forestry/FireSmart", "Niche", "Planning", "GIS", "Innovations", "Prescriptions/Ops"];
-      const colors = ["red", "blue", "green", "purple", "orange", "yellow"];
+      const colors = ["black", "black", "black", "black", "black", "black"];
       for (let i = 0; i < departments.length; i++) {
         div.innerHTML += `<i style="background: ${colors[i]}"></i> ${departments[i]}<br>`;
       }
