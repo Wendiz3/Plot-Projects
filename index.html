@@ -123,7 +123,7 @@ legend.onAdd = function(map) {
   const departments = ["Urban Forestry/FireSmart", "Niche", "Planning", "GIS", "Innovations", "Prescriptions/Ops"];
   const colors = ["red", "blue", "green", "purple", "orange", "yellow"];
   for (let i = 0; i < departments.length; i++) {
-    div.innerHTML += `<i style="background: ${colors[i]}"></i> ${departments[i]}<br>`;
+    div.innerHTML += `<i style="background: ${colors[i]}; width: 18px; height: 18px; display: inline-block; margin-right: 5px;"></i>${departments[i]}<br>`;
   }
   return div;
 };
