@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Leaflet Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xwE/5k50xH3XAl7drpcjUovM+G54f+mja4IR4T4HToRZMQJbEUwM9FkEirv6QIKmTzCA8LYB4m1x1P8wXfU9lg==" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-nMMtGLfUe4xe1xGZXs7VZJk6sbxYxMA5sm3ONpB0BfRIPjHKkl1c1gG08e84oGb/j9P+XofS4j1nkD6fiFvLeQ==" crossorigin=""></script>
+</head>
+<body>
+    <h1>Frontera Projects</h1>
+    <div id="map" style="width: 100%; height: 600px;"></div>
+
+    <script>
+        // Your R data transformed into JavaScript
+        const projects = [
+            { Client: 'Client1', Department: 'Planning', Lat: '51°30\'26"N', Long: '0°7\'39"W', Type: 'Type1' },
+            { Client: 'Client2', Department: 'GIS', Lat: '51°31\'30"N', Long: '0°8\'30"W', Type: 'Type2' }
+            // Add more projects as needed
+        ];
+
+        // Function to convert DMS to decimal degrees
+        function dmsToDecimal(dms) {
+            const parts = dms.split(/[^\d\w]+/);
+            let degrees = parseFloat(parts[0]);
+            let minutes = parseFloat(parts[1]);
+            let seconds = parseFloat(parts[2]);
+            let decimal = degrees + minutes / 60 + seconds / 3600;
+
+            // Handle negative values for west/south directions
+            if (dms.includes("S") || dms.includes("W")) {
+                decimal = -decimal;
+            }
+
+            return decimal;
+        }
+
+        // Prepare the data for Leaflet
+        const leafletInputUnique = projects.map(project => ({
+            Client: project.Client,
+            Department: project.Department,
+            Lat: dmsToDecimal(project.Lat),
+            Long: dmsToDecimal(project.Long),
+            Type: project.Type,
+            color: project.Department === "Urban Forestry/FireSmart" ? "red"
+                : project.Department === "Niche" ? "blue"
+                : project.Department === "Planning" ? "green"
+                : project.Department === "GIS" ? "purple"
+                : project.Department === "Innovations" ? "orange"
+                : project.Department === "Prescriptions/Ops" ? "yellow"
+                : "black"
+        }));
+
+        // Group by Client and concatenate Type values (if necessary)
+        const uniqueClients = leafletInputUnique;
+
+        // Create the leaflet map
+        var map = L.map('map').setView([51.505, -0.09], 13);
+
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Add circle markers
+        uniqueClients.forEach(client => {
+            L.circleMarker([client.Lat, client.Long], {
+                color: client.color,
+                radius: 5
+            }).addTo(map)
+            .bindPopup(`<b>Client:</b> ${client.Client}<br><b>Department:</b> ${client.Department}<br><b>Type:</b> ${client.Type}`);
+        });
+
+        // Add legend
+        var legend = L.control({position: 'bottomright'});
+
+        legend.onAdd = function (map) {
+            var div = L.DomUtil.create('div', 'info legend'),
+                departments = ["Urban Forestry/FireSmart", "Niche", "Planning", "GIS", "Innovations", "Prescriptions/Ops"],
+                colors = ["red", "blue", "green", "purple", "orange", "yellow"];
+
+            // loop through our density intervals and generate a label with a colored square for each interval
+            for (var i = 0; i < departments.length; i++) {
+                div.innerHTML +=
+                    '<i style="background:' + colors[i] + '"></i> ' +
+                    departments[i] + '<br>';
+            }
+
+            return div;
+        };
+
+        legend.addTo(map);
+    </script>
+</body>
+</html>
