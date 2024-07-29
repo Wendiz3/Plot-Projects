@@ -16,50 +16,13 @@
   <script>
     // Sample data equivalent to your CSV content
     const projects = [
-      { Client: "Client1", Department: "Urban Forestry/FireSmart", Latitude: "49°14'30\"N", Longitude: "123°6'45\"W", Type: "Type1" },
-      { Client: "Client2", Department: "Niche", Latitude: "49°14'40\"N", Longitude: "123°7'15\"W", Type: "Type2" },
+      { Client: "3780 Bayridge, West Vancouver", Department: "Urban Forestry/FireSmart", Latitude: 49.344167, Longitude: -123.220000, Type: "Arborist Report" },
+      { Client: "ABCFP", Department: "Niche", Latitude: 49.288056, Longitude: -123.126389, Type: "Committee, Training" },
+      { Client: "Alberni-Clayoquot Regional District", Department: "Planning", Latitude: 49.076389, Longitude: -125.766667, Type: "CWRP" },
+      { Client: "Askari, Pooneh", Department: "Urban Forestry/FireSmart", Latitude: 49.376389, Longitude: -123.290000, Type: "WHA" },
+      { Client: "BCIT", Department: "GIS", Latitude: 49.015833, Longitude: -121.071389, Type: "UAV" }
       // Add more data here
     ];
-
-    // Function to convert DMS to decimal degrees
-    function dmsToDecimal(dms) {
-      const parts = dms.split(/[^\d\w]+/);
-      const degrees = parseFloat(parts[0]);
-      const minutes = parseFloat(parts[1]);
-      const seconds = parseFloat(parts[2]);
-      let decimal = degrees + minutes / 60 + seconds / 3600;
-      if (dms.includes("S") || dms.includes("W")) {
-        decimal = -decimal;
-      }
-      return decimal;
-    }
-
-    // Convert data and prepare leaflet input
-    const leafletInput = projects.map(project => ({
-      Client: project.Client,
-      Department: project.Department,
-      Lat: dmsToDecimal(project.Latitude),
-      Long: dmsToDecimal(project.Longitude),
-      Type: project.Type
-    }));
-
-    // Remove rows with duplicate values in the 'Client' column
-    const uniqueClients = Array.from(new Map(leafletInput.map(item => [item.Client, item])).values());
-
-    // Define color palette by department
-    const colorMap = {
-      "Urban Forestry/FireSmart": "red",
-      "Niche": "blue",
-      "Planning": "green",
-      "GIS": "purple",
-      "Innovations": "orange",
-      "Prescriptions/Ops": "yellow",
-      "default": "black"
-    };
-
-    uniqueClients.forEach(client => {
-      client.color = colorMap[client.Department] || colorMap.default;
-    });
 
     // Initialize the map
     const map = L.map('map').setView([49.25, -123.12], 10); // Centered at Vancouver as an example
@@ -68,9 +31,14 @@
     }).addTo(map);
 
     // Add circle markers
-    uniqueClients.forEach(client => {
-      L.circleMarker([client.Lat, client.Long], {
-        color: client.color,
+    projects.forEach(client => {
+      L.circleMarker([client.Latitude, client.Longitude], {
+        color: client.Department === "Urban Forestry/FireSmart" ? "red" :
+               client.Department === "Niche" ? "blue" :
+               client.Department === "Planning" ? "green" :
+               client.Department === "GIS" ? "purple" :
+               client.Department === "Innovations" ? "orange" :
+               client.Department === "Prescriptions/Ops" ? "yellow" : "black",
         radius: 5
       }).addTo(map)
       .bindPopup(`<b>Client:</b> ${client.Client}<br><b>Department:</b> ${client.Department}<br><b>Type:</b> ${client.Type}`)
