@@ -101,27 +101,33 @@
     }).addTo(map);
 
     // Add circle markers
-    projects.forEach(client => {
-      L.circleMarker([client.Latitude, client.Longitude], {
-        color: 'black',
-        radius: 5
-      }).addTo(map)
-      .bindPopup(`<b>Client:</b> ${client.Client}<br><b>Department:</b> ${client.Department}<br><b>Type:</b> ${client.Type}`)
-      .bindTooltip(client.Client);
-    });
+projects.forEach(client => {
+  L.circleMarker([client.Latitude, client.Longitude], {
+    color: client.Department === "Urban Forestry/FireSmart" ? "red" :
+           client.Department === "Niche" ? "blue" :
+           client.Department === "Planning" ? "green" :
+           client.Department === "GIS" ? "purple" :
+           client.Department === "Innovations" ? "orange" :
+           client.Department === "Prescriptions/Ops" ? "yellow" : "black",
+    radius: 5
+  }).addTo(map)
+  .bindPopup(`<b>Client:</b> ${client.Client}<br><b>Department:</b> ${client.Department}<br><b>Type:</b> ${client.Type}`)
+  .bindTooltip(client.Client);
+});
 
-    // Add legend
-    const legend = L.control({ position: 'bottomright' });
-    legend.onAdd = function(map) {
-      const div = L.DomUtil.create('div', 'info legend');
-      const departments = ["Urban Forestry/FireSmart", "Niche", "Planning", "GIS", "Innovations", "Prescriptions/Ops"];
-      const colors = ["black", "black", "black", "black", "black", "black"];
-      for (let i = 0; i < departments.length; i++) {
-        div.innerHTML += `<i style="background: ${colors[i]}"></i> ${departments[i]}<br>`;
-      }
-      return div;
-    };
-    legend.addTo(map);
-  </script>
+// Add legend
+const legend = L.control({ position: 'bottomright' });
+legend.onAdd = function(map) {
+  const div = L.DomUtil.create('div', 'info legend');
+  div.style.backgroundColor = 'white'; // Set background color to white
+  const departments = ["Urban Forestry/FireSmart", "Niche", "Planning", "GIS", "Innovations", "Prescriptions/Ops"];
+  const colors = ["red", "blue", "green", "purple", "orange", "yellow"];
+  for (let i = 0; i < departments.length; i++) {
+    div.innerHTML += `<i style="background: ${colors[i]}"></i> ${departments[i]}<br>`;
+  }
+  return div;
+};
+legend.addTo(map);
+</script>
 </body>
 </html>
