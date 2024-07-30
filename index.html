@@ -100,34 +100,39 @@
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-// Add circle markers
-projects.forEach(client => {
-  L.circleMarker([client.Latitude, client.Longitude], {
-    color: client.Department === "Urban Forestry/FireSmart" ? "red" :
-           client.Department === "Niche" ? "blue" :
-           client.Department === "Planning" ? "green" :
-           client.Department === "GIS" ? "purple" :
-           client.Department === "Innovations" ? "orange" :
-           client.Department === "Prescriptions/Ops" ? "yellow" : "black",
-    radius: 5
-  }).addTo(map)
-  .bindPopup(`<b>Client:</b> ${client.Client}<br><b>Department:</b> ${client.Department}<br><b>Type:</b> ${client.Type}`)
-  .bindTooltip(client.Client);
-});
+    // Add circle markers
+    projects.forEach(client => {
+      L.circleMarker([client.Latitude, client.Longitude], {
+        color: client.Department === "Urban Forestry/FireSmart" ? "red" :
+               client.Department === "Niche" ? "blue" :
+               client.Department === "Planning" ? "green" :
+               client.Department === "GIS" ? "purple" :
+               client.Department === "Innovations" ? "orange" :
+               client.Department === "Prescriptions/Ops" ? "yellow" : "black",
+        radius: 5
+      }).addTo(map)
+      .bindPopup(`<b>Client:</b> ${client.Client}<br><b>Department:</b> ${client.Department}<br><b>Type:</b> ${client.Type}`)
+      .bindTooltip(client.Client);
+    });
 
-// Add legend
-const legend = L.control({ position: 'bottomright' });
-legend.onAdd = function(map) {
-  const div = L.DomUtil.create('div', 'info legend');
-  div.style.backgroundColor = 'white'; // Set background color to white
-  const departments = ["Urban Forestry/FireSmart", "Niche", "Planning", "GIS", "Innovations", "Prescriptions/Ops"];
-  const colors = ["red", "blue", "green", "purple", "orange", "yellow"];
-  for (let i = 0; i < departments.length; i++) {
-    div.innerHTML += `<i style="background: ${colors[i]}; width: 18px; height: 18px; display: inline-block; margin-right: 5px;"></i>${departments[i]}<br>`;
-  }
-  return div;
-};
-legend.addTo(map);
-</script>
+    // Add pin for Frontera Headquarters
+    L.marker([49.314630, -123.085650]).addTo(map)
+      .bindPopup(`<b>Frontera Headquarters</b><br>Address: 102-315 W 1st St., North Vancouver, BC V7M 1B5<br>Tel: 778-873-6742<br>Email: info@fronterasolutions.ca`)
+      .bindTooltip("Frontera Headquarters");
+
+    // Add legend
+    const legend = L.control({ position: 'bottomright' });
+    legend.onAdd = function(map) {
+      const div = L.DomUtil.create('div', 'info legend');
+      div.style.backgroundColor = 'white'; // Set background color to white
+      const departments = ["Urban Forestry/FireSmart", "Niche", "Planning", "GIS", "Innovations", "Prescriptions/Ops"];
+      const colors = ["red", "blue", "green", "purple", "orange", "yellow"];
+      for (let i = 0; i < departments.length; i++) {
+        div.innerHTML += `<i style="background: ${colors[i]}; width: 18px; height: 18px; display: inline-block; margin-right: 5px;"></i>${departments[i]}<br>`;
+      }
+      return div;
+    };
+    legend.addTo(map);
+  </script>
 </body>
 </html>
