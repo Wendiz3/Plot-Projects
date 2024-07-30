@@ -115,16 +115,8 @@
       .bindTooltip(client.Client);
     });
 
-    // Add pin for Frontera Headquarters with a custom red icon
-    const redIcon = L.icon({
-      iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-red.png',
-      iconSize: [25, 41], // size of the icon
-      iconAnchor: [12, 41], // point of the icon which will correspond to marker's location
-      popupAnchor: [1, -34], // point from which the popup should open relative to the iconAnchor
-      tooltipAnchor: [16, -28]
-    });
-    
-    L.marker([49.314630, -123.085650], { icon: redIcon }).addTo(map)
+    // Add pin for Frontera Headquarters
+    L.marker([49.314630, -123.085650]).addTo(map)
       .bindPopup(`<b>Frontera Headquarters</b><br>Address: 102-315 W 1st St., North Vancouver, BC V7M 1B5<br>Tel: 778-873-6742<br>Email: info@fronterasolutions.ca`)
       .bindTooltip("Frontera Headquarters");
 
