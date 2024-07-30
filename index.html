@@ -30,7 +30,7 @@
 <body>
   <div id="map"></div>
 
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
   <script>
     const projects = [
       { Client: '3780 Bayridge, West Vancouver', Department: 'Urban Forestry/FireSmart', Latitude: 49.34416667, Longitude: -123.22, Type: 'Arborist Report' },
@@ -138,11 +138,6 @@
     legend.onAdd = function(map) {
       const div = L.DomUtil.create('div', 'info legend');
       div.style.backgroundColor = 'white'; // Set background color to white
-      div.style.padding = '6px 8px';
-      div.style.font = '14px Arial, sans-serif';
-      div.style.boxShadow = '0 0 15px rgba(0,0,0,0.2)';
-      div.style.borderRadius = '5px';
-
       const departments = ["Urban Forestry/FireSmart", "Niche", "Planning", "GIS", "Innovations", "Prescriptions/Ops"];
       const colors = ["red", "blue", "green", "purple", "orange", "yellow"];
       for (let i = 0; i < departments.length; i++) {
