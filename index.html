@@ -142,69 +142,74 @@
       { Client: 'qathet Regional District', Department: 'Planning', Latitude: 49.84222222, Longitude: -124.5286111, Type: 'CWRP' }
     ];
 
-    // Set the bounds using the calculated coordinates
-    const bounds = [
-      [46.0651972, -137.1322444], // Bottom-left corner
-      [59.3463111, -81.7327361]   // Top-right corner
-    ];
+// Set the bounds using the calculated coordinates
+const bounds = [
+  [46.0651972, -137.1322444], // Bottom-left corner
+  [59.3463111, -81.7327361]   // Top-right corner
+];
 
-    // Initialize the map and fit to the bounds
-    const map = L.map('map').fitBounds(bounds);
+// Initialize the map
+const map = L.map('map');
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
-    
-    // Add circle markers
-    projects.forEach(client => {
-      L.circleMarker([client.Latitude, client.Longitude], {
-        color: client.Department === "Urban Forestry/FireSmart" ? "red" :
-               client.Department === "Tailored Solutions" ? "blue" :
-               client.Department === "Planning" ? "green" :
-               client.Department === "GIS" ? "purple" :
-               client.Department === "Innovations" ? "orange" :
-               client.Department === "Prescriptions/Ops" ? "yellow" : "black",
-        radius: 5
-      }).addTo(map)
-      .bindPopup(`<b>Client:</b> ${client.Client}<br><b>Department:</b> ${client.Department}<br><b>Type:</b> ${client.Type}`)
-      .bindTooltip(client.Client);
-    });
+// Fit the map to the bounds
+map.fitBounds(bounds);
 
-    // Add pin for Frontera Headquarters
-    L.marker([49.314630, -123.085650]).addTo(map)
-      .bindPopup(`<b>Frontera Headquarters</b><br>Address: 102-315 W 1st St., North Vancouver, BC V7M 1B5<br>Tel: 778-873-6742<br>Email: info@fronterasolutions.ca`)
-      .bindTooltip("Frontera Headquarters");
+// Add the tile layer to the map
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
 
-    // Add collapsible legend
-    const legend = L.control({ position: 'bottomright' });
-    legend.onAdd = function(map) {
-      const div = L.DomUtil.create('div', 'legend-container');
-      div.innerHTML = `
-        <div class="legend-header">Legend &#x25BC;</div>
-        <div class="legend-content">
-          <i style="background: red;"></i>Urban Forestry/FireSmart<br>
-          <i style="background: blue;"></i>Tailored Solutions<br>
-          <i style="background: green;"></i>Planning<br>
-          <i style="background: purple;"></i>GIS<br>
-          <i style="background: orange;"></i>Innovations<br>
-          <i style="background: yellow;"></i>Prescriptions/Ops<br>
-        </div>
-      `;
-      return div;
-    };
-    legend.addTo(map);
+// Add circle markers
+projects.forEach(client => {
+  L.circleMarker([client.Latitude, client.Longitude], {
+    color: client.Department === "Urban Forestry/FireSmart" ? "red" :
+           client.Department === "Tailored Solutions" ? "blue" :
+           client.Department === "Planning" ? "green" :
+           client.Department === "GIS" ? "purple" :
+           client.Department === "Innovations" ? "orange" :
+           client.Department === "Prescriptions/Ops" ? "yellow" : "black",
+    radius: 5
+  }).addTo(map)
+  .bindPopup(`<b>Client:</b> ${client.Client}<br><b>Department:</b> ${client.Department}<br><b>Type:</b> ${client.Type}`)
+  .bindTooltip(client.Client);
+});
 
-    // Toggle the legend content visibility
-    document.addEventListener('DOMContentLoaded', () => {
-      const legendHeader = document.querySelector('.legend-header');
-      const legendContent = document.querySelector('.legend-content');
+// Add pin for Frontera Headquarters
+L.marker([49.314630, -123.085650]).addTo(map)
+  .bindPopup(`<b>Frontera Headquarters</b><br>Address: 102-315 W 1st St., North Vancouver, BC V7M 1B5<br>Tel: 778-873-6742<br>Email: info@fronterasolutions.ca`)
+  .bindTooltip("Frontera Headquarters");
 
-      legendHeader.addEventListener('click', () => {
-        const isVisible = legendContent.style.display === 'block';
-        legendContent.style.display = isVisible ? 'none' : 'block';
-        legendHeader.innerHTML = `Legend ${isVisible ? '&#x25BC;' : '&#x25B2;'}`;
-      });
-    });
+// Add collapsible legend
+const legend = L.control({ position: 'bottomright' });
+legend.onAdd = function(map) {
+  const div = L.DomUtil.create('div', 'legend-container');
+  div.innerHTML = `
+    <div class="legend-header">Legend &#x25BC;</div>
+    <div class="legend-content">
+      <i style="background: red;"></i>Urban Forestry/FireSmart<br>
+      <i style="background: blue;"></i>Tailored Solutions<br>
+      <i style="background: green;"></i>Planning<br>
+      <i style="background: purple;"></i>GIS<br>
+      <i style="background: orange;"></i>Innovations<br>
+      <i style="background: yellow;"></i>Prescriptions/Ops<br>
+    </div>
+  `;
+  return div;
+};
+legend.addTo(map);
+
+// Toggle the legend content visibility
+document.addEventListener('DOMContentLoaded', () => {
+  const legendHeader = document.querySelector('.legend-header');
+  const legendContent = document.querySelector('.legend-content');
+
+  legendHeader.addEventListener('click', () => {
+    const isVisible = legendContent.style.display === 'block';
+    legendContent.style.display = isVisible ? 'none' : 'block';
+    legendHeader.innerHTML = `Legend ${isVisible ? '&#x25BC;' : '&#x25B2;'}`;
+  });
+});
   </script>
 </body>
 </html>
+
