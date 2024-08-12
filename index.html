@@ -6,11 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <style>
-    #map { height: 457px; width: 1382px; }
+    #map { height: 488px; width: 1445px; }
   </style>
 </head>
 <body>
-  <div id="map" style="height: 457px; width: 1382px;"></div>
+  <div id="map" style="height: 488px; width: 1445px;"></div>
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script>
@@ -94,11 +94,8 @@
       { Client: 'qathet Regional District', Department: 'Planning', Latitude: 49.84222222, Longitude: -124.5286111, Type: 'CWRP' }
     ];
 
-    // Initialize the map
-    const map = L.map('map').fitBounds([
-      [48.0, -139.0], // Southwest corner (approximate)
-      [54.0, -114.0]  // Northeast corner (approximate)
-    ]);
+    // Initialize the map and set center to specific coordinates with a default zoom level
+    const map = L.map('map').setView([53.2780, -110.0061], 10);
     
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
