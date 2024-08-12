@@ -116,13 +116,19 @@
       { Client: 'qathet Regional District', Department: 'Planning', Latitude: 49.84222222, Longitude: -124.5286111, Type: 'CWRP' }
     ];
 
-    // Initialize the map and set center to somewhere southern Canada with a default zoom level
-    const map = L.map('map').setView([53.2780, -110.0061], 5);
-    
+    // Set the bounds using the calculated coordinates
+    const bounds = [
+      [48.0651972, -137.1322444], // Bottom-left corner
+      [59.3463111, -81.7327361]   // Top-right corner
+    ];
+
+    // Initialize the map and fit to the bounds
+    const map = L.map('map').fitBounds(bounds);
+
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
-
+    
     // Add circle markers
     projects.forEach(client => {
       L.circleMarker([client.Latitude, client.Longitude], {
