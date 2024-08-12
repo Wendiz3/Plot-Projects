@@ -29,6 +29,32 @@
         width: 430px;
       }
     }
+
+    .legend-container {
+      background-color: white;
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    .legend-header {
+      cursor: pointer;
+      font-weight: bold;
+      padding: 5px;
+      text-align: center;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .legend-content {
+      display: none;
+      padding: 5px;
+    }
+
+    .legend-content i {
+      width: 18px;
+      height: 18px;
+      display: inline-block;
+      margin-right: 5px;
+    }
   </style>
 </head>
 <body>
@@ -149,19 +175,36 @@
       .bindPopup(`<b>Frontera Headquarters</b><br>Address: 102-315 W 1st St., North Vancouver, BC V7M 1B5<br>Tel: 778-873-6742<br>Email: info@fronterasolutions.ca`)
       .bindTooltip("Frontera Headquarters");
 
-    // Add legend
+    // Add collapsible legend
     const legend = L.control({ position: 'bottomright' });
     legend.onAdd = function(map) {
-      const div = L.DomUtil.create('div', 'info legend');
-      div.style.backgroundColor = 'white'; // Set background color to white
-      const departments = ["Urban Forestry/FireSmart", "Tailored Solutions", "Planning", "GIS", "Innovations", "Prescriptions/Ops"];
-      const colors = ["red", "blue", "green", "purple", "orange", "yellow"];
-      for (let i = 0; i < departments.length; i++) {
-        div.innerHTML += `<i style="background: ${colors[i]}; width: 18px; height: 18px; display: inline-block; margin-right: 5px;"></i>${departments[i]}<br>`;
-      }
+      const div = L.DomUtil.create('div', 'legend-container');
+      div.innerHTML = `
+        <div class="legend-header">Legend &#x25BC;</div>
+        <div class="legend-content">
+          <i style="background: red;"></i>Urban Forestry/FireSmart<br>
+          <i style="background: blue;"></i>Tailored Solutions<br>
+          <i style="background: green;"></i>Planning<br>
+          <i style="background: purple;"></i>GIS<br>
+          <i style="background: orange;"></i>Innovations<br>
+          <i style="background: yellow;"></i>Prescriptions/Ops<br>
+        </div>
+      `;
       return div;
     };
     legend.addTo(map);
+
+    // Toggle the legend content visibility
+    document.addEventListener('DOMContentLoaded', () => {
+      const legendHeader = document.querySelector('.legend-header');
+      const legendContent = document.querySelector('.legend-content');
+
+      legendHeader.addEventListener('click', () => {
+        const isVisible = legendContent.style.display === 'block';
+        legendContent.style.display = isVisible ? 'none' : 'block';
+        legendHeader.innerHTML = `Legend ${isVisible ? '&#x25BC;' : '&#x25B2;'}`;
+      });
+    });
   </script>
 </body>
 </html>
