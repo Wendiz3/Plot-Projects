@@ -6,17 +6,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <style>
-    #map { height: 900px; width: 100%; }
+    #map { height: 457px; width: 1382px; }
   </style>
 </head>
 <body>
-  <div id="map"></div>
+  <div id="map" style="height: 457px; width: 1382px;"></div>
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script>
     const projects = [
       { Client: '3780 Bayridge, West Vancouver', Department: 'Urban Forestry/FireSmart', Latitude: 49.34416667, Longitude: -123.22, Type: 'Arborist Report' },
-      { Client: 'ABCFP', Department: 'Niche', Latitude: 49.28805556, Longitude: -123.1263889, Type: 'Committee, Training' },
+      { Client: 'ABCFP', Department: 'Tailored Solutions', Latitude: 49.28805556, Longitude: -123.1263889, Type: 'Committee, Training' },
       { Client: 'Alberni-Clayoquot Regional District', Department: 'Planning', Latitude: 49.07638889, Longitude: -125.7666667, Type: 'CWRP' },
       { Client: 'Askari, Pooneh', Department: 'Urban Forestry/FireSmart', Latitude: 49.37638889, Longitude: -123.29, Type: 'WHA' },
       { Client: 'BCIT', Department: 'GIS', Latitude: 49.01583333, Longitude: -121.0713889, Type: 'UAV' },
@@ -26,7 +26,7 @@
       { Client: 'Cathro Consulting, LTD', Department: 'Innovations', Latitude: 49.91111111, Longitude: -116.9036111, Type: 'Fire Modelling, FMP, Burn Plan/Prescription, FireSmart, CWRP' },
       { Client: 'Central Interior Mapping Co. Ltd', Department: 'Prescriptions/Ops', Latitude: 52.87611111, Longitude: -122.3897222, Type: 'FMP' },
       { Client: 'Coldstream Nature Based Solutions', Department: 'Planning', Latitude: 48.80916667, Longitude: -124.6697222, Type: 'CWRP, Burn Plan/Prescription, FireSmart' },
-      { Client: 'Control Union Canada Inc.', Department: 'Niche', Latitude: 49.28722222, Longitude: -123.1158333, Type: 'Audit' },
+      { Client: 'Control Union Canada Inc.', Department: 'Tailored Solutions', Latitude: 49.28722222, Longitude: -123.1158333, Type: 'Audit' },
       { Client: 'Cook’s Ferry First Nation', Department: 'Planning', Latitude: 50.4225, Longitude: -121.3444444, Type: 'CWRP' },
       { Client: 'Diamond Head Consulting', Department: 'Prescriptions/Ops', Latitude: 49.25277778, Longitude: -123.0680556, Type: 'Ops Supervision, FireSmart' },
       { Client: 'Diamond Head Development', Department: 'Urban Forestry/FireSmart', Latitude: 49.71944444, Longitude: -123.1302778, Type: 'WHA' },
@@ -37,9 +37,9 @@
       { Client: 'District of Vanderhoof', Department: 'Planning', Latitude: 54.0175, Longitude: -124.0077778, Type: 'CWRP' },
       { Client: 'Divine Villas', Department: 'Urban Forestry/FireSmart', Latitude: 49.37222222, Longitude: -123.2736111, Type: 'Arborist Report, Urban Forestry' },
       { Client: 'Doig River First Nation', Department: 'Planning', Latitude: 56.57777778, Longitude: -120.4952778, Type: 'CWRP' },
-      { Client: 'Forest Practices Board', Department: 'Niche', Latitude: 48.42916667, Longitude: -123.3641667, Type: 'FPB' },
-      { Client: 'Forest Professionals BC', Department: 'Niche', Latitude: 49.28805556, Longitude: -123.1263889, Type: 'Committee' },
-      { Client: 'Fraser Basin Council', Department: 'Niche', Latitude: 49.28416667, Longitude: -123.1141667, Type: 'Committee' },
+      { Client: 'Forest Practices Board', Department: 'Tailored Solutions', Latitude: 48.42916667, Longitude: -123.3641667, Type: 'FPB' },
+      { Client: 'Forest Professionals BC', Department: 'Tailored Solutions', Latitude: 49.28805556, Longitude: -123.1263889, Type: 'Committee' },
+      { Client: 'Fraser Basin Council', Department: 'Tailored Solutions', Latitude: 49.28416667, Longitude: -123.1141667, Type: 'Committee' },
       { Client: 'Greer, David', Department: 'Urban Forestry/FireSmart', Latitude: 49.36111111, Longitude: -123.0983333, Type: 'Urban Forestry' },
       { Client: 'Halfway River First Nation', Department: 'Planning', Latitude: 56.51333333, Longitude: -121.965, Type: 'CWRP' },
       { Client: 'Hussey, Ian, and Rochelle', Department: 'Urban Forestry/FireSmart', Latitude: 49.34527778, Longitude: -123.2044444, Type: 'WHA' },
@@ -48,7 +48,7 @@
       { Client: 'Kispiox (Anspayaxw) Band', Department: 'Planning', Latitude: 55.34888889, Longitude: -127.6980556, Type: 'CWRP, FireSmart' },
       { Client: 'Lilwat First Nation', Department: 'Prescriptions/Ops', Latitude: 50.31805556, Longitude: -122.7213889, Type: 'FMP, FireSmart, Ops Supervision, CWRP' },
       { Client: 'Lin, William', Department: 'Urban Forestry/FireSmart', Latitude: 49.34833333, Longitude: -123.2436111, Type: 'WHA' },
-      { Client: 'MOF - BC Wildfire Service', Department: 'Niche', Latitude: 55.34861111, Longitude: -123.0563889, Type: 'Monitoring' },
+      { Client: 'MOF - BC Wildfire Service', Department: 'Tailored Solutions', Latitude: 55.34861111, Longitude: -123.0563889, Type: 'Monitoring' },
       { Client: 'MOF - 100 Mile House Natural Resource District', Department: 'Prescriptions/Ops', Latitude: 55.34861111, Longitude: -123.0563889, Type: 'FMP' },
       { Client: 'MOF - Campbell River Natural Resource District', Department: 'Planning', Latitude: 55.34861111, Longitude: -123.0563889, Type: 'WUI WRR Plan' },
       { Client: 'MOF - Kootenay Boundary Selkirk Resource District', Department: 'Planning', Latitude: 55.34861111, Longitude: -123.0563889, Type: 'WUI WRR Plan' },
@@ -72,7 +72,7 @@
       { Client: 'Port Hardy', Department: 'Planning', Latitude: 50.72416667, Longitude: -127.4972222, Type: 'CWRP' },
       { Client: 'Quest Land Holdings LP', Department: 'Urban Forestry/FireSmart', Latitude: 49.73694444, Longitude: -123.0972222, Type: 'WHA' },
       { Client: 'Regional District of Bulkley-Nechako (RDBN)', Department: 'Planning', Latitude: 54.23, Longitude: -125.7636111, Type: 'CWRP' },
-      { Client: 'Resort Municipality of Whistler', Department: 'Niche', Latitude: 50.11694444, Longitude: -122.9541667, Type: 'RMOW' },
+      { Client: 'Resort Municipality of Whistler', Department: 'Tailored Solutions', Latitude: 50.11694444, Longitude: -122.9541667, Type: 'RMOW' },
       { Client: 'Resort Municipality of Whistler', Department: 'GIS', Latitude: 50.11694444, Longitude: -122.9541667, Type: 'Heat Mapping' },
       { Client: 'Richard Blagborne', Department: 'Urban Forestry/FireSmart', Latitude: 49.35722222, Longitude: -123.08, Type: 'WHA' },
       { Client: 'Robin B Clark Inc.', Department: 'Prescriptions/Ops', Latitude: 58.43444444, Longitude: -129.9858333, Type: 'FMP' },
@@ -95,7 +95,11 @@
     ];
 
     // Initialize the map
-    const map = L.map('map').setView([49.25, -123.12], 10); // Centered at Vancouver as an example
+    const map = L.map('map').fitBounds([
+      [48.0, -139.0], // Southwest corner (approximate)
+      [54.0, -114.0]  // Northeast corner (approximate)
+    ]);
+    
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
@@ -104,7 +108,7 @@
     projects.forEach(client => {
       L.circleMarker([client.Latitude, client.Longitude], {
         color: client.Department === "Urban Forestry/FireSmart" ? "red" :
-               client.Department === "Niche" ? "blue" :
+               client.Department === "Tailored Solutions" ? "blue" :
                client.Department === "Planning" ? "green" :
                client.Department === "GIS" ? "purple" :
                client.Department === "Innovations" ? "orange" :
@@ -125,7 +129,7 @@
     legend.onAdd = function(map) {
       const div = L.DomUtil.create('div', 'info legend');
       div.style.backgroundColor = 'white'; // Set background color to white
-      const departments = ["Urban Forestry/FireSmart", "Niche", "Planning", "GIS", "Innovations", "Prescriptions/Ops"];
+      const departments = ["Urban Forestry/FireSmart", "Tailored Solutions", "Planning", "GIS", "Innovations", "Prescriptions/Ops"];
       const colors = ["red", "blue", "green", "purple", "orange", "yellow"];
       for (let i = 0; i < departments.length; i++) {
         div.innerHTML += `<i style="background: ${colors[i]}; width: 18px; height: 18px; display: inline-block; margin-right: 5px;"></i>${departments[i]}<br>`;
