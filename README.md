@@ -1,2 +1,2 @@
-# test
-This is a testing of turning R Leaflet code to HTML
+# Plot Project
+This is the functioning, published leaflet web map. Do not edit directly in here :)
