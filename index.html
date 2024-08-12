@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Leaflet Map</title>
+  <title>Leaflet Map with Heatmap</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
   <style>
     /* For desktop screens */
     @media (min-width: 1024px) {
@@ -60,16 +62,12 @@
 <body>
   <div id="map"></div>
 
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script>
-    const projects = [
-      { Client: 'Individual Landowner', Department: 'Urban Forestry/FireSmart', Latitude: 49.34416667, Longitude: -123.22, Type: 'Arborist Report' },
+    const allProjects = [
       { Client: 'ABCFP', Department: 'Tailored Solutions', Latitude: 49.28805556, Longitude: -123.1263889, Type: 'Committee, Training' },
       { Client: 'Alberni-Clayoquot Regional District', Department: 'Planning', Latitude: 49.07638889, Longitude: -125.7666667, Type: 'CWRP' },
-      { Client: 'Individual Landowner', Department: 'Urban Forestry/FireSmart', Latitude: 49.37638889, Longitude: -123.29, Type: 'WHA' },
       { Client: 'BCIT', Department: 'GIS', Latitude: 49.01583333, Longitude: -121.0713889, Type: 'UAV' },
       { Client: 'Blueberry River First Nation', Department: 'Planning', Latitude: 56.70333333, Longitude: -121.1125, Type: 'CWRP' },
-      { Client: 'CRGL (Chartwell)', Department: 'Urban Forestry/FireSmart', Latitude: 49.71944444, Longitude: -123.1302778, Type: 'WHA' },
       { Client: 'Cascade Lower Canyon Community Forest', Department: 'Planning', Latitude: 49.37777778, Longitude: -121.44, Type: 'Community Forest' },
       { Client: 'Cathro Consulting, LTD', Department: 'Innovations', Latitude: 49.91111111, Longitude: -116.9036111, Type: 'Fire Modelling, FMP, Burn Plan/Prescription, FireSmart, CWRP' },
       { Client: 'Central Interior Mapping Co. Ltd', Department: 'Prescriptions/Ops', Latitude: 52.87611111, Longitude: -122.3897222, Type: 'FMP' },
@@ -77,25 +75,20 @@
       { Client: 'Control Union Canada Inc.', Department: 'Tailored Solutions', Latitude: 49.28722222, Longitude: -123.1158333, Type: 'Audit' },
       { Client: 'Cook’s Ferry First Nation', Department: 'Planning', Latitude: 50.4225, Longitude: -121.3444444, Type: 'CWRP' },
       { Client: 'Diamond Head Consulting', Department: 'Prescriptions/Ops', Latitude: 49.25277778, Longitude: -123.0680556, Type: 'Ops Supervision, FireSmart' },
-      { Client: 'Diamond Head Development', Department: 'Urban Forestry/FireSmart', Latitude: 49.71944444, Longitude: -123.1302778, Type: 'WHA' },
       { Client: 'District of Chetwynd', Department: 'GIS', Latitude: 55.69555556, Longitude: -121.6391667, Type: 'Heat Mapping' },
       { Client: 'District of Fort St. James', Department: 'Prescriptions/Ops', Latitude: 54.44444444, Longitude: -124.2594444, Type: 'FMP, Ops Supervision' },
       { Client: 'District of MacKenzie', Department: 'Prescriptions/Ops', Latitude: 55.32416667, Longitude: -123.0925, Type: 'FMP' },
       { Client: 'District of Mackenzie', Department: 'Planning', Latitude: 55.32416667, Longitude: -123.0925, Type: 'CWRP, FMP' },
       { Client: 'District of Vanderhoof', Department: 'Planning', Latitude: 54.0175, Longitude: -124.0077778, Type: 'CWRP' },
-      { Client: 'Individual Landowner', Department: 'Urban Forestry/FireSmart', Latitude: 49.37222222, Longitude: -123.2736111, Type: 'Arborist Report, Urban Forestry' },
       { Client: 'Doig River First Nation', Department: 'Planning', Latitude: 56.57777778, Longitude: -120.4952778, Type: 'CWRP' },
       { Client: 'Forest Practices Board', Department: 'Tailored Solutions', Latitude: 48.42916667, Longitude: -123.3641667, Type: 'FPB' },
       { Client: 'Forest Professionals BC', Department: 'Tailored Solutions', Latitude: 49.28805556, Longitude: -123.1263889, Type: 'Committee' },
       { Client: 'Fraser Basin Council', Department: 'Tailored Solutions', Latitude: 49.28416667, Longitude: -123.1141667, Type: 'Committee' },
-      { Client: 'Individual Landowner', Department: 'Urban Forestry/FireSmart', Latitude: 49.36111111, Longitude: -123.0983333, Type: 'Urban Forestry' },
       { Client: 'Halfway River First Nation', Department: 'Planning', Latitude: 56.51333333, Longitude: -121.965, Type: 'CWRP' },
-      { Client: 'Individual Landowner', Department: 'Urban Forestry/FireSmart', Latitude: 49.34527778, Longitude: -123.2044444, Type: 'WHA' },
       { Client: 'Imperial Exterior Enterprises Inc.', Department: 'Urban Forestry/FireSmart', Latitude: 49.34416667, Longitude: -123.22, Type: 'TRAQ' },
       { Client: 'Kaslo District Community Forest Society', Department: 'Innovations', Latitude: 49.91111111, Longitude: -116.9036111, Type: 'Fire Modelling' },
       { Client: 'Kispiox (Anspayaxw) Band', Department: 'Planning', Latitude: 55.34888889, Longitude: -127.6980556, Type: 'CWRP, FireSmart' },
       { Client: 'Lilwat First Nation', Department: 'Prescriptions/Ops', Latitude: 50.31805556, Longitude: -122.7213889, Type: 'FMP, FireSmart, Ops Supervision, CWRP' },
-      { Client: 'Individual Landowner', Department: 'Urban Forestry/FireSmart', Latitude: 49.34833333, Longitude: -123.2436111, Type: 'WHA' },
       { Client: 'MOF - BC Wildfire Service', Department: 'Tailored Solutions', Latitude: 55.34861111, Longitude: -123.0563889, Type: 'Monitoring' },
       { Client: 'MOF - 100 Mile House Natural Resource District', Department: 'Prescriptions/Ops', Latitude: 55.34861111, Longitude: -123.0563889, Type: 'FMP' },
       { Client: 'MOF - Campbell River Natural Resource District', Department: 'Planning', Latitude: 55.34861111, Longitude: -123.0563889, Type: 'WUI WRR Plan' },
@@ -107,109 +100,145 @@
       { Client: 'MOF - Skeena Stikine Natural Resource District', Department: 'Planning', Latitude: 54.77194444, Longitude: -127.14, Type: 'WUI WRR Plan, FMP' },
       { Client: 'MOF - Stuart Nechako Forest District', Department: 'Planning', Latitude: 54.00777778, Longitude: -123.9947222, Type: 'WUI WRR Plan' },
       { Client: 'MOF - Thompson Rivers Forest District', Department: 'Prescriptions/Ops', Latitude: 50.77138889, Longitude: -121.5694444, Type: 'Burn Plan/Prescription' },
-      { Client: 'Marble Construction', Department: 'Urban Forestry/FireSmart', Latitude: 49.3175, Longitude: -123.0425, Type: 'Urban Forestry' },
-      { Client: 'Individual Landowner', Department: 'Urban Forestry/FireSmart', Latitude: 49.39333333, Longitude: -123.2547222, Type: 'WHA, Arborist Report' },
       { Client: 'McLeod Lake Mackenzie Community Forest', Department: 'Planning', Latitude: 55.34861111, Longitude: -123.0563889, Type: 'MLMCF' },
       { Client: 'Nakazdli Whuten First Nation', Department: 'Planning', Latitude: 54.43833333, Longitude: -124.25, Type: 'CWRP' },
-      { Client: 'Nenqay Department XGFNG', Department: 'Urban Forestry/FireSmart', Latitude: 51.46694444, Longitude: -123.945, Type: 'FireSmart' },
-      { Client: 'Individual Landowner', Department: 'Urban Forestry/FireSmart', Latitude: 49.35805556, Longitude: -123.2588889, Type: 'WHA, Arborist Report' },
-      { Client: 'Nquatqua First Nation', Department: 'Urban Forestry/FireSmart', Latitude: 50.55, Longitude: -122.4844444, Type: 'FireSmart' },
-      { Client: 'Individual Landowner', Department: 'Urban Forestry/FireSmart', Latitude: 49.34944444, Longitude: -123.2483333, Type: 'Urban Forestry' },
-      { Client: 'Individual Landowner', Department: 'Urban Forestry/FireSmart', Latitude: 49.35166667, Longitude: -122.9111111, Type: 'Urban Forestry' },
       { Client: 'Pinchin Ltd.', Department: 'Innovations', Latitude: 49.17611111, Longitude: -123.0722222, Type: 'Fire Modelling' },
       { Client: 'Port Hardy', Department: 'Planning', Latitude: 50.72416667, Longitude: -127.4972222, Type: 'CWRP' },
-      { Client: 'Quest Land Holdings LP', Department: 'Urban Forestry/FireSmart', Latitude: 49.73694444, Longitude: -123.0972222, Type: 'WHA' },
       { Client: 'Regional District of Bulkley-Nechako (RDBN)', Department: 'Planning', Latitude: 54.23, Longitude: -125.7636111, Type: 'CWRP' },
       { Client: 'Resort Municipality of Whistler', Department: 'Tailored Solutions', Latitude: 50.11694444, Longitude: -122.9541667, Type: 'RMOW' },
       { Client: 'Resort Municipality of Whistler', Department: 'GIS', Latitude: 50.11694444, Longitude: -122.9541667, Type: 'Heat Mapping' },
-      { Client: 'Individual Landowner', Department: 'Urban Forestry/FireSmart', Latitude: 49.35722222, Longitude: -123.08, Type: 'WHA' },
       { Client: 'Robin B Clark Inc.', Department: 'Prescriptions/Ops', Latitude: 58.43444444, Longitude: -129.9858333, Type: 'FMP' },
       { Client: 'Soowhalie First Nation', Department: 'Planning', Latitude: 49.08111111, Longitude: -121.9691667, Type: 'CWRP' },
       { Client: 'Spelkumtn Community Forest', Department: 'Planning', Latitude: 50.3575, Longitude: -122.865, Type: 'Community Forest, Ops Supervision, Education/Engagement' },
       { Client: 'Spelkumtn Community Forest', Department: 'Prescriptions/Ops', Latitude: 50.3575, Longitude: -122.865, Type: 'FMP' },
       { Client: 'Stellat\'en First Nation', Department: 'Planning', Latitude: 54.06361111, Longitude: -124.9111111, Type: 'CWRP, FireSmart' },
-      { Client: 'Strata Corporation for Bluffs at Taluswood', Department: 'Urban Forestry/FireSmart', Latitude: 50.09027778, Longitude: -123.0294444, Type: 'Arborist Report, Ops Supervision' },
       { Client: 'Sunshine Coast Community Forest', Department: 'Planning', Latitude: 49.47138889, Longitude: -123.7575, Type: 'Community Forest' },
       { Client: 'Tlesqox First Nation', Department: 'Planning', Latitude: 51.92944444, Longitude: -122.5013889, Type: 'CWRP' },
       { Client: 'Tlazten First Nation', Department: 'Prescriptions/Ops', Latitude: 54.65277778, Longitude: -124.7319444, Type: 'FMP, CWRP' },
-      { Client: 'Individual Landowner', Department: 'Urban Forestry/FireSmart', Latitude: 49.37583333, Longitude: -123.2905556, Type: 'WHA' },
       { Client: 'UBC - Malcolm Knapp Research Forest', Department: 'GIS', Latitude: 49.26333333, Longitude: -122.5730556, Type: 'UAV' },
       { Client: 'Ucluelet', Department: 'Planning', Latitude: 48.9425, Longitude: -125.5458333, Type: 'CWRP' },
       { Client: 'Village of Canal Flats', Department: 'Planning', Latitude: 50.15944444, Longitude: -115.8075, Type: 'CWRP, FireSmart' },
-      { Client: 'Village of Lions Bay', Department: 'Urban Forestry/FireSmart', Latitude: 49.45861111, Longitude: -123.2352778, Type: 'FireSmart' },
-      { Client: 'Wauzhususkh Onigum Nation', Department: 'Urban Forestry/FireSmart', Latitude: 49.74694444, Longitude: -94.48083333, Type: 'FireSmart' },
-      { Client: 'Individual Landowner', Department: 'Urban Forestry/FireSmart', Latitude: 49.35222222, Longitude: -123.1452778, Type: 'WHA' },
       { Client: 'qathet Regional District', Department: 'Planning', Latitude: 49.84222222, Longitude: -124.5286111, Type: 'CWRP' }
     ];
 
-// Set the bounds using the calculated coordinates
-const bounds = [
-  [48.0000000, -137.000000], // Bottom-left corner
-  [59.0000000, -81.0000000]   // Top-right corner
-];
+    const urbanForestryProjects = [
+      { Client: '3780 Bayridge, West Vancouver', Latitude: 49.34416667, Longitude: -123.22, Area: 'West Vancouver' },
+      { Client: 'Divine Villas', Latitude: 49.37222222, Longitude: -123.2736111, Area: 'West Vancouver' },
+      { Client: 'Greer, David', Latitude: 49.36111111, Longitude: -123.0983333, Area: 'North Vancouver' },
+      { Client: 'Ono, Tyson', Latitude: 49.34944444, Longitude: -123.2483333, Area: 'West Vancouver' },
+      { Client: 'Pawlowski, Paul', Latitude: 49.35166667, Longitude: -122.9111111, Area: 'North Vancouver' },
+      { Client: 'Askari, Pooneh', Latitude: 49.37638889, Longitude: -123.29, Area: 'West Vancouver' },
+      { Client: 'Hussey, Ian, and Rochelle', Latitude: 49.34527778, Longitude: -123.2044444, Area: 'West Vancouver' },
+      { Client: 'Lin, William', Latitude: 49.34833333, Longitude: -123.2436111, Area: 'West Vancouver' },
+      { Client: 'Richard Blagborne', Latitude: 49.35722222, Longitude: -123.08, Area: 'North Vancouver' },
+      { Client: 'Turfus, Ralph', Latitude: 49.37583333, Longitude: -123.2905556, Area: 'West Vancouver' },
+      { Client: 'Yen, Eric', Latitude: 49.35222222, Longitude: -123.1452778, Area: 'West Vancouver' },
+      { Client: 'McLeod Bovell', Latitude: 49.39333333, Longitude: -123.2547222, Area: 'West Vancouver' },
+      { Client: 'Nielsen, Greg', Latitude: 49.35805556, Longitude: -123.2588889, Area: 'West Vancouver' }
+    ];
 
-// Initialize the map
-const map = L.map('map');
+    const additionalUrbanForestryProjects = [
+      { Client: 'Strata Corporation for Bluffs at Taluswood', Latitude: 50.09027778, Longitude: -123.0294444, Area: 'Strata Corporation for Bluffs at Taluswood' },
+      { Client: 'Nenqay Department XGFNG', Latitude: 51.46694444, Longitude: -123.945, Area: 'Nenqay Department XGFNG' },
+      { Client: 'Nquatqua First Nation', Latitude: 50.55, Longitude: -122.4844444, Area: 'Nquatqua First Nation' },
+      { Client: 'Village of Lions Bay', Latitude: 49.45861111, Longitude: -123.2352778, Area: 'Village of Lions Bay' },
+      { Client: 'Wauzhususkh Onigum Nation', Latitude: 49.74694444, Longitude: -94.48083333, Area: 'Wauzhususkh Onigum Nation' },
+      { Client: 'Imperial Exterior Enterprises Inc.', Latitude: 49.34416667, Longitude: -123.22, Area: 'Imperial Exterior Enterprises Inc.' },
+      { Client: 'Marble Construction', Latitude: 49.3175, Longitude: -123.0425, Area: 'Marble Construction' },
+      { Client: 'CRGL (Chartwell)', Latitude: 49.71944444, Longitude: -123.1302778, Area: 'CRGL (Chartwell)' },
+      { Client: 'Diamond Head Development', Latitude: 49.71944444, Longitude: -123.1302778, Area: 'Diamond Head Development' },
+      { Client: 'Quest Land Holdings LP', Latitude: 49.73694444, Longitude: -123.0972222, Area: 'Quest Land Holdings LP' }
+    ];
 
-// Fit the map to the bounds
-map.fitBounds(bounds);
+    // Separate urban forestry projects into North Vancouver and West Vancouver
+    const northVancouver = urbanForestryProjects.filter(p => p.Area === 'North Vancouver');
+    const westVancouver = urbanForestryProjects.filter(p => p.Area === 'West Vancouver');
 
-// Add the tile layer to the map
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(map);
+    // Prepare heatmap data
+    const northVancouverHeatData = northVancouver.map(p => [p.Latitude, p.Longitude, 1]);
+    const westVancouverHeatData = westVancouver.map(p => [p.Latitude, p.Longitude, 1]);
 
-// Add circle markers
-projects.forEach(client => {
-  L.circleMarker([client.Latitude, client.Longitude], {
-    color: client.Department === "Urban Forestry/FireSmart" ? "red" :
-           client.Department === "Tailored Solutions" ? "blue" :
-           client.Department === "Planning" ? "green" :
-           client.Department === "GIS" ? "purple" :
-           client.Department === "Innovations" ? "orange" :
-           client.Department === "Prescriptions/Ops" ? "yellow" : "black",
-    radius: 5
-  }).addTo(map)
-  .bindPopup(`<b>Client:</b> ${client.Client}<br><b>Department:</b> ${client.Department}<br><b>Type:</b> ${client.Type}`)
-  .bindTooltip(client.Client);
-});
+    // Set the bounds using the calculated coordinates
+    const bounds = [
+      [48.0000000, -137.000000], // Bottom-left corner
+      [59.0000000, -81.0000000]   // Top-right corner
+    ];
 
-// Add pin for Frontera Headquarters
-L.marker([49.314630, -123.085650]).addTo(map)
-  .bindPopup(`<b>Frontera Headquarters</b><br>Address: 102-315 W 1st St., North Vancouver, BC V7M 1B5<br>Tel: 778-873-6742<br>Email: info@fronterasolutions.ca`)
-  .bindTooltip("Frontera Headquarters");
+    // Initialize the map
+    const map = L.map('map');
 
-// Add collapsible legend
-const legend = L.control({ position: 'bottomright' });
-legend.onAdd = function(map) {
-  const div = L.DomUtil.create('div', 'legend-container');
-  div.innerHTML = `
-    <div class="legend-header">Legend &#x25BC;</div>
-    <div class="legend-content">
-      <i style="background: red;"></i>Urban Forestry/FireSmart<br>
-      <i style="background: blue;"></i>Tailored Solutions<br>
-      <i style="background: green;"></i>Planning<br>
-      <i style="background: purple;"></i>GIS<br>
-      <i style="background: orange;"></i>Innovations<br>
-      <i style="background: yellow;"></i>Prescriptions/Ops<br>
-    </div>
-  `;
-  return div;
-};
-legend.addTo(map);
+    // Fit the map to the bounds
+    map.fitBounds(bounds);
 
-// Toggle the legend content visibility
-document.addEventListener('DOMContentLoaded', () => {
-  const legendHeader = document.querySelector('.legend-header');
-  const legendContent = document.querySelector('.legend-content');
+    // Add the tile layer to the map
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
 
-  legendHeader.addEventListener('click', () => {
-    const isVisible = legendContent.style.display === 'block';
-    legendContent.style.display = isVisible ? 'none' : 'block';
-    legendHeader.innerHTML = `Legend ${isVisible ? '&#x25BC;' : '&#x25B2;'}`;
-  });
-});
+    // Add heatmap layers for Urban Forestry projects
+    L.heatLayer(northVancouverHeatData, { radius: 25, blur: 15, gradient: { 0.4: 'blue', 0.65: 'lime', 1: 'red' } }).addTo(map);
+    L.heatLayer(westVancouverHeatData, { radius: 25, blur: 15, gradient: { 0.4: 'blue', 0.65: 'lime', 1: 'red' } }).addTo(map);
+
+    // Add circle markers for all projects
+    allProjects.forEach(client => {
+      L.circleMarker([client.Latitude, client.Longitude], {
+        color: client.Department === "Urban Forestry/FireSmart" ? "red" :
+               client.Department === "Tailored Solutions" ? "blue" :
+               client.Department === "Planning" ? "green" :
+               client.Department === "GIS" ? "purple" :
+               client.Department === "Innovations" ? "orange" :
+               client.Department === "Prescriptions/Ops" ? "yellow" : "black",
+        radius: 5
+      }).addTo(map)
+      .bindPopup(`<b>Client:</b> ${client.Client}<br><b>Department:</b> ${client.Department}<br><b>Type:</b> ${client.Type}`)
+      .bindTooltip(client.Client);
+    });
+
+    // Add circle markers for additional Urban Forestry projects
+    additionalUrbanForestryProjects.forEach(client => {
+      L.circleMarker([client.Latitude, client.Longitude], {
+        color: 'red',
+        radius: 5
+      }).addTo(map)
+      .bindPopup(`<b>Client:</b> ${client.Client}<br><b>Area:</b> ${client.Area}`)
+      .bindTooltip(client.Client);
+    });
+
+    // Add pin for Frontera Headquarters
+    L.marker([49.314630, -123.085650]).addTo(map)
+      .bindPopup(`<b>Frontera Headquarters</b><br>Address: 102-315 W 1st St., North Vancouver, BC V7M 1B5<br>Tel: 778-873-6742<br>Email: info@fronterasolutions.ca`)
+      .bindTooltip("Frontera Headquarters");
+
+    // Add collapsible legend
+    const legend = L.control({ position: 'bottomright' });
+    legend.onAdd = function(map) {
+      const div = L.DomUtil.create('div', 'legend-container');
+      div.innerHTML = `
+        <div class="legend-header">Legend &#x25BC;</div>
+        <div class="legend-content">
+          <i style="background: red;"></i> Urban Forestry/FireSmart<br>
+          <i style="background: blue;"></i> Tailored Solutions<br>
+          <i style="background: green;"></i> Planning<br>
+          <i style="background: purple;"></i> GIS<br>
+          <i style="background: orange;"></i> Innovations<br>
+          <i style="background: yellow;"></i> Prescriptions/Ops<br>
+        </div>
+      `;
+      return div;
+    };
+    legend.addTo(map);
+
+    // Toggle the legend content visibility
+    document.addEventListener('DOMContentLoaded', () => {
+      const legendHeader = document.querySelector('.legend-header');
+      const legendContent = document.querySelector('.legend-content');
+
+      legendHeader.addEventListener('click', () => {
+        const isVisible = legendContent.style.display === 'block';
+        legendContent.style.display = isVisible ? 'none' : 'block';
+        legendHeader.innerHTML = `Legend ${isVisible ? '&#x25BC;' : '&#x25B2;'}`;
+      });
+    });
   </script>
 </body>
 </html>
-
