@@ -61,7 +61,6 @@
     <div id="map"></div>
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
     <script>
         const projects = [
             // Non-urban projects
@@ -164,13 +163,31 @@
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        // Add heatmap layer 
-        const heat = L.heatLayer(
-            heatmapPoints.map(p => [p.Latitude, p.Longitude]),
-            { radius: 25, blur: 15, maxZoom: 17 }
-        ).addTo(map);
+        // Function to calculate point density
+        function calculateDensity(points) {
+            const densityMap = new Map();
+            points.forEach(point => {
+                const key = `${point.Latitude},${point.Longitude}`;
+                densityMap.set(key, (densityMap.get(key) || 0) + 1);
+            });
+            return densityMap;
+        }
 
-        // Add circle markers
+        const densityMap = calculateDensity(heatmapPoints);
+
+        // Add circle markers for heatmap points with varying sizes based on density
+        heatmapPoints.forEach(point => {
+            const density = densityMap.get(`${point.Latitude},${point.Longitude}`);
+            const size = Math.min(20, 5 + density * 2);  // Adjust size based on density, with a max size
+
+            L.circleMarker([point.Latitude, point.Longitude], {
+                color: "red",
+                radius: size,
+                fillOpacity: 0.7
+            }).addTo(map);
+        });
+
+        // Add circle markers for other projects
         projects.forEach(client => {
             L.circleMarker([client.Latitude, client.Longitude], {
                 color: client.Department === "Urban Forestry/FireSmart" ? "red" :
