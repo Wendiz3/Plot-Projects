@@ -193,7 +193,7 @@
         // Add circle markers for municipalities with varying sizes based on density
         for (const [municipality, coords] of Object.entries(municipalities)) {
             const density = densityMap.get(municipality) || 0;  // Default to 0 if no data for this municipality
-            const size = density > 0 ? Math.min(40, 10 + density * 5) : 0;  // Adjust size based on density, with a max size
+            const size = density > 0 ? Math.min(20, 5 + density * 2) : 0;  // Adjust size based on density, with a max size
             
             if (size > 0) {
                 L.circleMarker([coords.Latitude, coords.Longitude], {
