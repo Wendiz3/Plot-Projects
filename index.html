@@ -117,6 +117,8 @@
             { Client: 'Ucluelet', Department: 'Planning', Latitude: 48.9425, Longitude: -125.5458333, Type: 'CWRP' },
             { Client: 'Village of Canal Flats', Department: 'Planning', Latitude: 50.15944444, Longitude: -115.8075, Type: 'CWRP, FireSmart' },
             { Client: 'qathet Regional District', Department: 'Planning', Latitude: 49.84222222, Longitude: -124.5286111, Type: 'CWRP' },
+
+        // Urban projects - non-citizen clients
             { Client: 'Strata Corporation for Bluffs at Taluswood', Department: 'Urban Forestry/FireSmart', Latitude: 50.09027778, Longitude: -123.0294444, Type: 'Arborist Report, Ops Supervision' },
             { Client: 'Nenqay Department XGFNG', Department: 'Urban Forestry/FireSmart', Latitude: 51.46694444, Longitude: -123.945, Type: 'FireSmart' },
             { Client: 'Nquatqua First Nation', Department: 'Urban Forestry/FireSmart', Latitude: 50.55, Longitude: -122.4844444, Type: 'FireSmart' },
@@ -131,19 +133,19 @@
 
         // Urban projects - citizen clients
         const heatmapPoints = [
-            { Latitude: 49.34416667, Longitude: -123.22 },
-            { Latitude: 49.37222222, Longitude: -123.2736111 },
-            { Latitude: 49.36111111, Longitude: -123.0983333 },
-            { Latitude: 49.34944444, Longitude: -123.2483333 },
-            { Latitude: 49.35166667, Longitude: -122.9111111 },
-            { Latitude: 49.37638889, Longitude: -123.29 },
-            { Latitude: 49.34527778, Longitude: -123.2044444 },
-            { Latitude: 49.34833333, Longitude: -123.2436111 },
-            { Latitude: 49.35722222, Longitude: -123.08 },
-            { Latitude: 49.37583333, Longitude: -123.2905556 },
-            { Latitude: 49.35222222, Longitude: -123.1452778 },
-            { Latitude: 49.39333333, Longitude: -123.2547222 },
-            { Latitude: 49.35805556, Longitude: -123.2588889 }
+            { Latitude: 49.34416667, Longitude: -123.22, Municipality: 'West Vancouver' },
+            { Latitude: 49.37222222, Longitude: -123.2736111, Municipality: 'West Vancouver' },
+            { Latitude: 49.36111111, Longitude: -123.0983333, Municipality: 'North Vancouver' },
+            { Latitude: 49.34944444, Longitude: -123.2483333, Municipality: 'West Vancouver' },
+            { Latitude: 49.35166667, Longitude: -122.9111111, Municipality: 'Coquitlam' },
+            { Latitude: 49.37638889, Longitude: -123.29, Municipality: 'West Vancouver' },
+            { Latitude: 49.34527778, Longitude: -123.2044444, Municipality: 'West Vancouver' },
+            { Latitude: 49.34833333, Longitude: -123.2436111, Municipality: 'West Vancouver' },
+            { Latitude: 49.35722222, Longitude: -123.08, Municipality: 'North Vancouver' },
+            { Latitude: 49.37583333, Longitude: -123.2905556, Municipality: 'West Vancouver' },
+            { Latitude: 49.35222222, Longitude: -123.1452778, Municipality: 'West Vancouver' },
+            { Latitude: 49.39333333, Longitude: -123.2547222, Municipality: 'West Vancouver' },
+            { Latitude: 49.35805556, Longitude: -123.2588889, Municipality: 'West Vancouver' }
         ];
 
         // Set the bounds using the calculated coordinates
@@ -163,29 +165,46 @@
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        // Function to calculate point density
-        function calculateDensity(points) {
+        // Function to calculate density by municipality
+        function calculateDensityByMunicipality(points) {
             const densityMap = new Map();
             points.forEach(point => {
-                const key = `${point.Latitude},${point.Longitude}`;
+                const key = point.Municipality;
                 densityMap.set(key, (densityMap.get(key) || 0) + 1);
             });
             return densityMap;
         }
 
-        const densityMap = calculateDensity(heatmapPoints);
+        const densityMap = calculateDensityByMunicipality(heatmapPoints);
 
-        // Add circle markers for heatmap points with varying sizes based on density
-        heatmapPoints.forEach(point => {
-            const density = densityMap.get(`${point.Latitude},${point.Longitude}`);
-            const size = Math.min(20, 5 + density * 2);  // Adjust size based on density, with a max size
+        // Coordinates for Metro Vancouver municipalities
+        const municipalities = {
+            'Vancouver': { Latitude: 49.2827, Longitude: -123.1207 },
+            'Burnaby': { Latitude: 49.2488, Longitude: -122.9805 },
+            'Richmond': { Latitude: 49.1666, Longitude: -123.1336 },
+            'North Vancouver': { Latitude: 49.3208, Longitude: -123.0726 },
+            'West Vancouver': { Latitude: 49.3271, Longitude: -123.1599 },
+            'Coquitlam': { Latitude: 49.2838, Longitude: -122.7932 },
+            'Squamish': { Latitude: 49.7016, Longitude: -123.1559 },
+            'Whistler': { Latitude: 50.1163, Longitude: -122.9574 },
+            // Add more municipalities if needed...
+        };
 
-            L.circleMarker([point.Latitude, point.Longitude], {
-                color: "red",
-                radius: size,
-                fillOpacity: 0.7
-            }).addTo(map);
-        });
+        // Add circle markers for municipalities with varying sizes based on density
+        for (const [municipality, coords] of Object.entries(municipalities)) {
+            const density = densityMap.get(municipality) || 0;  // Default to 0 if no data for this municipality
+            const size = density > 0 ? Math.min(40, 10 + density * 5) : 0;  // Adjust size based on density, with a max size
+            
+            if (size > 0) {
+                L.circleMarker([coords.Latitude, coords.Longitude], {
+                    color: "red",
+                    radius: size,
+                    fillOpacity: 0.7
+                }).addTo(map)
+                .bindPopup(`<b>Municipality:</b> ${municipality}<br><b>Projects:</b> ${density}`)
+                .bindTooltip(municipality);
+            }
+        }
 
         // Add circle markers for other projects
         projects.forEach(client => {
