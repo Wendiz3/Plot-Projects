@@ -131,6 +131,23 @@ const projects = [
   { Client: 'Quest Land Holdings LP', Department: 'Urban Forestry/FireSmart', Latitude: 49.73694444, Longitude: -123.0972222, Type: 'WHA' }
 ];
 
+// Urban projects - citizen clients
+const heatmapPoints = [
+  { Latitude: 49.34416667, Longitude: -123.22 },
+  { Latitude: 49.37222222, Longitude: -123.2736111 },
+  { Latitude: 49.36111111, Longitude: -123.0983333 },
+  { Latitude: 49.34944444, Longitude: -123.2483333 },
+  { Latitude: 49.35166667, Longitude: -122.9111111 },
+  { Latitude: 49.37638889, Longitude: -123.29 },
+  { Latitude: 49.34527778, Longitude: -123.2044444 },
+  { Latitude: 49.34833333, Longitude: -123.2436111 },
+  { Latitude: 49.35722222, Longitude: -123.08 },
+  { Latitude: 49.37583333, Longitude: -123.2905556 },
+  { Latitude: 49.35222222, Longitude: -123.1452778 },
+  { Latitude: 49.39333333, Longitude: -123.2547222 },
+  { Latitude: 49.35805556, Longitude: -123.2588889 }
+];
+  
 // Set the bounds using the calculated coordinates
 const bounds = [
   [48.0000000, -137.000000], // Bottom-left corner
@@ -147,6 +164,12 @@ map.fitBounds(bounds);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
+
+// Add heatmap layer 
+const heat = L.heatLayer(
+  heatmapPoints.map(p => [p.Latitude, p.Longitude]),
+  { radius: 25, blur: 15, maxZoom: 17 }
+).addTo(map);
 
 // Add circle markers
 projects.forEach(client => {
