@@ -111,7 +111,7 @@
       { Client: 'Soowhalie First Nation', Department: 'Planning', Latitude: 49.08111111, Longitude: -121.9691667, Type: 'CWRP' },
       { Client: 'Spelkumtn Community Forest', Department: 'Planning', Latitude: 50.3575, Longitude: -122.865, Type: 'Community Forest, Ops Supervision, Education/Engagement' },
       { Client: 'Spelkumtn Community Forest', Department: 'Prescriptions/Ops', Latitude: 50.3575, Longitude: -122.865, Type: 'FMP' },
-      { Client: 'Stellat\'en First Nation', Department: 'Planning', Latitude: 54.06361111, Longitude: -124.9111111, Type: 'CWRP, FireSmart' },
+      { Client: 'Stellat'en First Nation', Department: 'Planning', Latitude: 54.06361111, Longitude: -124.9111111, Type: 'CWRP, FireSmart' },
       { Client: 'Sunshine Coast Community Forest', Department: 'Planning', Latitude: 49.47138889, Longitude: -123.7575, Type: 'Community Forest' },
       { Client: 'Tlesqox First Nation', Department: 'Planning', Latitude: 51.92944444, Longitude: -122.5013889, Type: 'CWRP' },
       { Client: 'Tlazten First Nation', Department: 'Prescriptions/Ops', Latitude: 54.65277778, Longitude: -124.7319444, Type: 'FMP, CWRP' },
@@ -158,17 +158,8 @@
     const northVancouverHeatData = northVancouver.map(p => [p.Latitude, p.Longitude, 1]);
     const westVancouverHeatData = westVancouver.map(p => [p.Latitude, p.Longitude, 1]);
 
-    // Set the bounds using the calculated coordinates
-    const bounds = [
-      [48.0000000, -137.000000], // Bottom-left corner
-      [59.0000000, -81.0000000]   // Top-right corner
-    ];
-
     // Initialize the map
-    const map = L.map('map');
-
-    // Fit the map to the bounds
-    map.fitBounds(bounds);
+    const map = L.map('map').setView([49.3, -123.2], 10);
 
     // Add the tile layer to the map
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
