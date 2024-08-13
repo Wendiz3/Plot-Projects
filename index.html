@@ -148,17 +148,8 @@
             { Latitude: 49.35805556, Longitude: -123.2588889, Municipality: 'West Vancouver' }
         ];
 
-        // Set the bounds using the calculated coordinates
-        const bounds = [
-            [48.0000000, -137.000000], // Bottom-left corner
-            [59.0000000, -81.0000000]   // Top-right corner
-        ];
-
-        // Initialize the map
-        const map = L.map('map');
-
-        // Fit the map to the bounds
-        map.fitBounds(bounds);
+        // Initialize the map with a center and zoom level
+        const map = L.map('map').setView([50, -120], 5); // Adjust the zoom level if necessary
 
         // Add the tile layer to the map
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
